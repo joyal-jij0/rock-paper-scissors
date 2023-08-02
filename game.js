@@ -1,45 +1,75 @@
-function game() {
+    let humanScore = 0;
+    let computerScore = 0;
     function getComputerChoice() {
         const choices = ["rock", "paper", "scissors"];
         return (choices[Math.floor(Math.random() * 3)]);
     }
 
-    let playerSelection = prompt("Enter your choice");
-    playerSelection = playerSelection.toLowerCase();
+    let playerSelection;
 
-    getComputerChoice();
-    let computerSelection = getComputerChoice();
+    const buttons = document.querySelectorAll('button');
+
+    buttons.forEach((button) => {
+        button.addEventListener('click', handleButtonClick);
+    })
+
+
+    function removeButtonClickListeners(){
+        buttons.forEach((button) => {
+            button.removeEventListener('click, handleButtonClick');
+        });
+    }
+
+    function handleButtonClick(event) {
+        playerSelection = event.target.classList.value;
+
+        let computerSelection = getComputerChoice();
+        playRound(playerSelection, computerSelection);
+
+        if (humanScore === 5 || computerScore === 5) {
+            displayFinalResult();
+            removeButtonClickListeners();
+        }
+
+    }
 
     function playRound(playerSelection, computerSelection) {
         if (playerSelection === computerSelection) {
-            console.log("Its a tie");
+            const newDiv = document.createElement('div');
+            newDiv.classList.add('new');
+            newDiv.textContent = "Its a tie";
+            document.body.appendChild(newDiv);
         } else if ((playerSelection === "rock" && computerSelection === "paper") || (playerSelection === "paper" && computerSelection === "scissors") || (playerSelection === "scissors" && computerSelection === "rock")) {
-            console.log("You Lose! " + computerSelection + " beats " + playerSelection);
+            const newDiv = document.createElement('div');
+            newDiv.classList.add('new');
+            newDiv.textContent = ("You Lose! " + computerSelection + " beats " + playerSelection);
+            document.body.appendChild(newDiv);
             computerScore += 1;
         } else if ((playerSelection === "rock" && computerSelection === "scissors") || (playerSelection === "paper" && computerSelection === "rock") || (playerSelection === "scissors" && computerSelection === "paper")) {
-            console.log("You Win!! " + playerSelection + " beats " + computerSelection);
-            humanScore = +1;
-        } else {
-            console.log("Please enter choice as rock, paper or scissors")
+            const newDiv = document.createElement('div');
+            newDiv.classList.add('new');
+            newDiv.textContent = ("You Win!! " + playerSelection + " beats " + computerSelection);
+            document.body.appendChild(newDiv);
+            humanScore += 1;
         }
     }
+        function displayFinalResult() {
+            if (humanScore === 5) {
+                const finalDiv = document.createElement('div');
+                finalDiv.classList.add('human');
+                finalDiv.textContent = "You win! Mankind lives another day";
+                document.body.appendChild(finalDiv);
+            } else if (computerScore === 5) {
+                console.log("Computer kills");
+                const finalDiv = document.createElement('div');
+                finalDiv.classList.add('computer');
+                finalDiv.textContent = "You Lost... Who Will Save Mankind Now? ";
+                document.body.appendChild(finalDiv);
+            }
+        }
 
-    playRound(playerSelection,computerSelection);
-}
-let humanScore = 0;
-let computerScore = 0;
-
-for(let i= 0; i < 5; i++) {
-    game();
-}
-
-if(humanScore === computerScore){
-    console.log("It's a tie between Human and Computer in round of 5");
-}
-else if(humanScore > computerScore){
-    console.log("Human beats Computer in a round of 5");
-}
-
-else if(humanScore < computerScore){
-    console.log("Computer beats human in a round of 5");
-}
+        function removeButtonClickListeners() {
+            buttons.forEach((button) => {
+                button.removeEventListener('click', handleButtonClick);
+            });
+        }
